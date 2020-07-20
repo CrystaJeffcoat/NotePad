@@ -2,7 +2,6 @@ const express = require("express");
 const fs = require("fs");
 const app = express();
 const path = require("path");
-const { networkInterfaces } = require("os");
 const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
@@ -21,52 +20,64 @@ app.get("/", function(req, res) {
     res.sendFile("public/index.html", {root: __dirname })
 });
 
-// store and retrieve notes from db.json using fs module
-addToFile({ title: 'mnv', text: 'kjf' });
-function addToFile(newNote) {
-    fs.readFile("db/db.json", function(err, data) {
-        if (data.length > 0) {
-            let notesString = data.toString("utf-8");
-            let notesJSON = JSON.parse(notesString);
-            allNotes = notesJSON;
-            console.log(allNotes);
-            allNotes.push(newNote);
-            console.log(allNotes);
-
-            fs.writeFile("db/db.json", JSON.stringify(allNotes), function(err) {
-                if (err) {
-                    console.log(err);
-                };
-            });
-        } else {
-            allNotes.push(newNote);
-            console.log(allNotes)
-            fs.writeFile("db/db.json", JSON.stringify(allNotes), function(err) {
-                if (err) {
-                    console.log(err);
-                };
-            });
-        };
-    });
-};
-
 // create GET /api/notes
 app.get("/api/notes", function(req, res) {
-    fs.readFile("db/db.json", function(err, allNotes) {
-        //res.writeHead(200);
-        let notesString = allNotes.toString("utf-8");
-        let notesJSON = JSON.parse(notesString);
-        res.json(notesJSON);
+    readDataBase(function(err, data) {
+        res.json(data);
     });
 }); 
 
 // create POST
 app.post("/api/notes", function(req, res) {
-
     let newNote = req.body;
     addToFile(newNote);
-
 });
+
+app.delete("api/notes/:id", function(id) {
+    readDataBase(function(err, data) {
+       
+    });
+})
+
+// store and retrieve notes from db.json using fs module
+function addToFile(newNote) {
+    readDataBase(function(err, data) {
+        if (data.length > 0) {
+            allNotes = data;
+        };
+        allNotes.push(newNote);
+        writeDataBase(allNotes);
+        console.log(allNotes)
+    });
+};
+
+// read db file and get back array of data when called
+function readDataBase(callback) {
+    fs.readFile("db/db.json", function(err, data) {
+        if (err) {
+            console.log(err)
+        };
+        if (data.length > 0) {
+            let notesString = data.toString("utf-8");
+            let notesJSON = JSON.parse(notesString);
+            callback(null, notesJSON);
+        } else callback(null, data);
+        console.log("read file");
+        // for (item in data) {
+        //     console.log(data[item]);
+        //}
+    });
+};
+
+// write to database 
+function writeDataBase(data) {
+    fs.writeFile("db/db.json", JSON.stringify(data), function(err) {
+        if (err) {
+            console.log(err);
+        };
+        console.log("wrote to file");
+    });
+}
 
 // connect to the server
 app.listen(PORT, function() {
