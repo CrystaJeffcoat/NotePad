@@ -15,6 +15,6 @@ Using express, notes created by the user will be stored into a database with a G
 
 ![image 1](public/assets/img/img1.png)
 
-![image 1](public/assets/img/image2.png)
+![image 2](public/assets/img/image2.png)
 
 
