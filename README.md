@@ -13,7 +13,7 @@ Using express, notes created by the user will be stored into a database with a G
 
 ### Link to application
 
-![alt text](https://intense-sea-80554.herokuapp.com)
+[link to heroku website](https://intense-sea-80554.herokuapp.com)
 
 ![image 1](/public/assets/img/image1)
 
