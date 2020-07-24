@@ -1,10 +1,9 @@
 # NotePad
 
+### [Link to application](https://intense-sea-80554.herokuapp.com)
 ```
 Write, save, and delete notes with this application.
 ```
-
-### [Link to application](https://intense-sea-80554.herokuapp.com)
 
 ## Description
 
